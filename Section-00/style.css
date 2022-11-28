@@ -11,10 +11,9 @@
     left: 50%;
     transform: translate(-50%, -50%);
     background: #4d79bc;
-    max-width: 800px;
-    max-height: 600px;
     min-width: 800px;
     min-height: 600px;
+    /*font-family: 'Bangers', cursive;*/
 }
 
 .img-assets {
