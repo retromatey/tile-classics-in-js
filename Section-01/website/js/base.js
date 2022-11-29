@@ -15,5 +15,9 @@ export default class Base {
         this.context.arc(centerX, centerY, radius, 0, Math.PI * 2, true);
         this.context.fill();
     }
+    colorText(x, y, fillColor, text) {
+        this.context.fillStyle = fillColor;
+        this.context.fillText(text, x, y);
+    }
 }
 //# sourceMappingURL=base.js.map

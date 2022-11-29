@@ -14,16 +14,15 @@ export default class Paddle extends Base {
     get bottomEdge() { return this._centerY + (this._height * 0.5); }
     resetPosition() {
         this._centerX = this.canvas.width * 0.5;
-        this._centerY = this.canvas.height - (this._height * 0.5);
+        // this._centerY = this.canvas.height - (this._height * 0.5);
+        this._centerY = this.canvas.height - 40;
     }
     update(mouseX) {
         this._centerX = mouseX;
-        const leftEdge = this._centerX - (this._width * 0.5);
-        const rightEdge = this._centerX + (this._width * 0.5);
-        if (leftEdge < 0) {
+        if (this.leftEdge < 0) {
             this._centerX = this._width * 0.5;
         }
-        else if (rightEdge > this.canvas.width) {
+        else if (this.rightEdge > this.canvas.width) {
             this._centerX = this.canvas.width - (this._width * 0.5);
         }
     }
@@ -35,9 +34,7 @@ export default class Paddle extends Base {
     getPaddleSpin(x) {
         const pCenter = this._width * 0.5;
         const hitX = Math.abs(x - (this.leftEdge + pCenter));
-        // return Math.ceil(hitX / (pCenter / 3));
-        const spin = hitX / (pCenter / 3.5);
-        return spin <= 0.75 ? 1 : spin;
+        return hitX / (pCenter / 3.5);
     }
     getPaddleDirection(x, speedX) {
         const directionX = speedX < 0 ? -1 : 1;
