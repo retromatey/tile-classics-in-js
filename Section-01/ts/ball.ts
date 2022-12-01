@@ -1,5 +1,7 @@
 ﻿import Base from "./base.js";
 import Paddle from "./paddle.js";
+import Bricks from "./bricks.js";
+import Brick from "./brick";
 
 export default class Ball extends Base {
     get centerX(): number { return this._centerX; }
@@ -31,7 +33,7 @@ export default class Ball extends Base {
         this._centerY = 200;
     }
     
-    public update(paddle: Paddle) {      
+    public update(paddle: Paddle, bricks: Bricks) {      
         this._centerX += this._speedX * this._spinX;
         this._centerY += this._speedY;
         
@@ -63,11 +65,23 @@ export default class Ball extends Base {
             } else if (this.paddleCollisionLeft(paddle)) {
                 this._centerX = paddle.leftEdge - this._radius;
             }
+            
+        } else {
+            let brick = this.brickCollision(bricks);
+            
+            if (brick !== null) {
+                this._speedY *= -1;
+                this._centerY = brick.bottomY + this._radius;
+            }
         }
     }
     
     public draw() {
         this.colorCircle(this._centerX, this._centerY, this._radius, 'white');
+        
+        this.drawDebug(() => {
+            this.drawBoundingBox();
+        });
     }
 
     public canvasBottomCollision(): boolean {
@@ -93,5 +107,100 @@ export default class Ball extends Base {
                this.ballRightEdge < paddle.rightEdge &&
                this.centerY < paddle.bottomEdge && 
                this.centerY > paddle.topEdge;
+    }
+
+    private brickCollision(bricks: Bricks) {
+        const rowLength = bricks.brickArray.length;
+        const columnLength = bricks.brickArray[0].length;
+
+        for (let i = 0; i < rowLength; i++) {
+
+            for (let j = 0; j < columnLength; j++) {
+                const brick = bricks.brickArray[i][j];
+                
+                if (brick.alive) {
+                    const collision =
+                        this.centerY < brick.bottomY &&
+                        this.centerY > brick.topY &&
+                        this.centerX > brick.leftX &&
+                        this.centerX < brick.rightX;
+
+                    if (collision) {
+                        brick.alive = false;
+                        return brick;
+                    }
+                }
+            }
+        }
+        
+        return null;
+    }
+
+    private brickCollisionLeft(bricks: Bricks) {
+        const rowLength = bricks.brickArray.length;
+        const columnLength = bricks.brickArray[0].length;
+
+        for (let i = 0; i < rowLength; i++) {
+
+            for (let j = 0; j < columnLength; j++) {
+                const brick = bricks.brickArray[i][j];
+
+                if (brick.alive) {
+                    const collision =
+                        this.centerY < brick.bottomY &&
+                        this.centerY > brick.topY &&
+                        this.ballRightEdge > brick.leftX &&
+                        this.ballRightEdge < brick.rightX;
+
+                    if (collision) {
+                        brick.alive = false;
+                        return brick;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private brickCollisionRight(bricks: Bricks) {
+        const rowLength = bricks.brickArray.length;
+        const columnLength = bricks.brickArray[0].length;
+
+        for (let i = 0; i < rowLength; i++) {
+
+            for (let j = 0; j < columnLength; j++) {
+                const brick = bricks.brickArray[i][j];
+
+                if (brick.alive) {
+                    const collision =
+                        this.centerY < brick.bottomY &&
+                        this.centerY > brick.topY &&
+                        this.ballLeftEdge > brick.leftX &&
+                        this.ballLeftEdge < brick.rightX;
+
+                    if (collision) {
+                        brick.alive = false;
+                        return brick;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+    
+    private drawBoundingBox() {
+        const boundX = this.centerX - this._radius;
+        const boundY = this.centerY - this._radius;
+        const length = this._radius * 2;
+        const boundingColor = 'red';
+        // bounding box
+        this.context.strokeStyle = boundingColor;
+        this.context.lineWidth = 1;
+        this.context.strokeRect(boundX, boundY, length, length);
+        // x,y coordinate
+        this.context.fillStyle = boundingColor;
+        this.context.fillRect(this.centerX, this.centerY, 1, 1);
     }
 }

@@ -25,7 +25,7 @@ export default class Ball extends Base {
         this._centerX = 200;
         this._centerY = 200;
     }
-    update(paddle) {
+    update(paddle, bricks) {
         this._centerX += this._speedX * this._spinX;
         this._centerY += this._speedY;
         if (this.ballLeftEdge < 0) {
@@ -56,9 +56,19 @@ export default class Ball extends Base {
                 this._centerX = paddle.leftEdge - this._radius;
             }
         }
+        else {
+            let brick = this.brickCollisionBottom(bricks);
+            if (brick !== null) {
+                this._speedY *= -1;
+                this._centerY = brick.bottomY + this._radius;
+            }
+        }
     }
     draw() {
         this.colorCircle(this._centerX, this._centerY, this._radius, 'white');
+        this.drawDebug(() => {
+            this.drawBoundingBox();
+        });
     }
     canvasBottomCollision() {
         return this.ballBottomEdge > this.canvas.height;
@@ -80,6 +90,39 @@ export default class Ball extends Base {
             this.ballRightEdge < paddle.rightEdge &&
             this.centerY < paddle.bottomEdge &&
             this.centerY > paddle.topEdge;
+    }
+    brickCollisionBottom(bricks) {
+        const rowLength = bricks.brickArray.length;
+        const columnLength = bricks.brickArray[0].length;
+        for (let i = 0; i < rowLength; i++) {
+            for (let j = 0; j < columnLength; j++) {
+                const brick = bricks.brickArray[i][j];
+                if (brick.alive) {
+                    const collision = this.centerY < brick.bottomY &&
+                        this.centerY > brick.topY &&
+                        this.centerX > brick.leftX &&
+                        this.centerX < brick.rightX;
+                    if (collision) {
+                        brick.alive = false;
+                        return brick;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    drawBoundingBox() {
+        const boundX = this.centerX - this._radius;
+        const boundY = this.centerY - this._radius;
+        const length = this._radius * 2;
+        const boundingColor = 'red';
+        // bounding box
+        this.context.strokeStyle = boundingColor;
+        this.context.lineWidth = 1;
+        this.context.strokeRect(boundX, boundY, length, length);
+        // x,y coordinate
+        this.context.fillStyle = boundingColor;
+        this.context.fillRect(this.centerX, this.centerY, 1, 1);
     }
 }
 //# sourceMappingURL=ball.js.map

@@ -55,7 +55,7 @@ export default class Paddle extends Base {
         else if (directionX === 1 && spinThreshold <= -2) {
             result = -1;
         }
-        console.log(`spinThreshold: ${spinThreshold}, hitX: ${hitX}, directionX: ${directionX}, we are going: ${result}`);
+        this.logDebug('Paddle', `spinThreshold: ${spinThreshold}, hitX: ${hitX}, directionX: ${directionX}, we are going: ${result}`);
         return result;
     }
 }
