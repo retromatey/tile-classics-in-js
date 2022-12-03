@@ -70,4 +70,34 @@ export default class Paddle extends Base {
         
         return result;
     }
+
+    public collisionLeft(x: number, y: number, directionX: number) {
+
+        if (directionX > 0) {
+            return this.bottomY >= y && y >= this.topY &&
+                   this.leftX <= x && x <= this.rightX;
+        }
+
+        return false;
+    }
+
+    public collisionRight(x: number, y: number, directionX: number) {
+
+        if (directionX < 0) {
+            return this.bottomY >= y && y >= this.topY &&
+                   this.leftX <= x && x <= this.rightX;
+        }
+
+        return false;
+    }
+
+    public collisionTop(x: number, y: number, directionY: number) {
+
+        if (directionY > 0) {
+            return this.bottomY >= y && y >= this.topY &&
+                   this.leftX <= x && x <= this.rightX;
+        }
+
+        return false;
+    }
 }

@@ -109,4 +109,35 @@ export default class Brick extends Base {
 
         return false;
     }
+
+    public getSpin(x: number) {
+        const pCenter = this._width * 0.5;
+        const hitX = Math.abs(x - (this.leftX + pCenter));
+        return hitX / (pCenter / 3.5);
+    }
+
+    public getDirection(x: number, speedX: number) {
+        const directionX = speedX < 0 ? -1 : 1;
+
+        const pCenter = this._width * 0.5;
+        const hitX = x - (this.leftX + pCenter);
+        const directionHit = hitX < 0 ? -1 : 1;
+
+        const spinThreshold = this.getSpin(x) * directionHit;
+
+        let result = directionX;
+        if (directionX === -1 && spinThreshold <= -2) {
+            result = -1;
+        } else if (directionX === -1 && spinThreshold >= 2) {
+            result = 1;
+        } else if (directionX === 1 && spinThreshold >= 2) {
+            result = 1;
+        } else if (directionX === 1 && spinThreshold <= -2) {
+            result = -1;
+        }
+
+        this.logDebug('Brick', `spinThreshold: ${spinThreshold}, hitX: ${hitX}, directionX: ${directionX}, we are going: ${result}`);
+
+        return result;
+    }
 }

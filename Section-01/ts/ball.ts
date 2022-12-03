@@ -50,36 +50,29 @@ export default class Ball extends Base {
             this._speedY *= -1;           
             
         } else if (this.bottomY > paddle.topY - 20) {
+            let paddleCollision = false;
+            
+            if (paddle.collisionLeft(this.rightX, this.centerY, this._speedX)) {
+                this.logDebug('ball', 'Left paddle collision');
+                paddleCollision = true;
 
-            if (this.paddleCollision(paddle) ||
-                this.paddleCollisionRight(paddle) ||
-                this.paddleCollisionLeft(paddle) ) {
+            } else if (paddle.collisionRight(this.leftX, this.centerY, this._speedX)) {
+                this.logDebug('ball', 'Right paddle collision');
+                paddleCollision = true;
 
-                if (this.paddleCollision(paddle)) {
-                    this.logDebug('Ball', 'Paddle collision top');
-                    this._speedY *= -1;
-                    this._spinX = paddle.getPaddleSpin(this._centerX);
-                    this._speedX = paddle.getPaddleDirection(this._centerX, this._speedX) < 0 ? -this._maxSpeedX : this._maxSpeedX;
-                    this._centerY = paddle.topY - this._radius;
-
-                } else if (this.paddleCollisionRight(paddle)) {
-                    this.logDebug('Ball', 'Paddle collision right');
-                    this._speedY *= -1;
-                    this._spinX = paddle.getPaddleSpin(this._centerX);
-                    this._speedX = paddle.getPaddleDirection(this._centerX, this._speedX) < 0 ? -this._maxSpeedX : this._maxSpeedX;
-                    this._centerX = paddle.rightX + this._radius;
-
-                } else if (this.paddleCollisionLeft(paddle)) {
-                    this.logDebug('Ball', 'Paddle collision left');
-                    this._speedY *= -1;
-                    this._spinX = paddle.getPaddleSpin(this._centerX);
-                    this._speedX = paddle.getPaddleDirection(this._centerX, this._speedX) < 0 ? -this._maxSpeedX : this._maxSpeedX;
-                    this._centerX = paddle.leftX - this._radius;
-                }
+            } else if (paddle.collisionTop(this.centerX, this.bottomY, this._speedY)) {
+                this.logDebug('ball', 'Top paddle collision');
+                paddleCollision = true;
+            }
+            
+            if (paddleCollision) {
+                this._speedY *= -1;
+                this._spinX = paddle.getPaddleSpin(this._centerX);
+                this._speedX = paddle.getPaddleDirection(this._centerX, this._speedX) < 0 ? -this._maxSpeedX : this._maxSpeedX;
             }
                 
         } else if (this.topY < bricks.bottomRowY + 20) {
-            let collision = false;
+            let brickCollision = false;
             
             for (let i = 0; i < bricks.rows; i++) {
 
@@ -90,32 +83,32 @@ export default class Ball extends Base {
                         
                         if (brick.collisionLeft(this.rightX, this.centerY, this._speedX)) {
                             this.logDebug('ball', 'Left brick collision');
-                            collision = true;
+                            brickCollision = true;
                             this._speedX = -this._maxSpeedX;
 
                         } else if (brick.collisionRight(this.leftX, this.centerY, this._speedX)) {
                             this.logDebug('ball', 'Right brick collision');
-                            collision = true;
+                            brickCollision = true;
                             this._speedX = this._maxSpeedX;
 
                         } else if (brick.collisionTop(this.centerX, this.bottomY, this._speedY)) {
                             this.logDebug('ball', 'Top brick collision');
-                            collision = true;
+                            brickCollision = true;
                             this._speedY = -this._maxSpeedY;
 
                         } else if (brick.collisionBottom(this.centerX, this.topY, this._speedY)) {
                             this.logDebug('ball', 'Bottom brick collision');
-                            collision = true;
+                            brickCollision = true;
                             this._speedY = this._maxSpeedY;
                         }
                     }
 
-                    if (collision) {
+                    if (brickCollision) {
                         break;
                     }
                 }
                 
-                if (collision) {
+                if (brickCollision) {
                     break;
                 }
             }
@@ -135,42 +128,6 @@ export default class Ball extends Base {
 
     public canvasBottomCollision(): boolean {
         return this.bottomY > this.canvas.height;
-    }
-
-    private paddleCollision(paddle: Paddle): boolean {
-        
-        if (this._speedY > 0) {
-            return this.bottomY >= paddle.topY &&
-                this.bottomY < paddle.bottomY &&
-                this.centerX >= paddle.leftX &&
-                this.centerX <= paddle.rightX;
-        }
-        
-        return false;
-    }
-    
-    private paddleCollisionRight(paddle: Paddle) {    
-        
-        if (this._speedX < 0) {
-            return this.leftX > paddle.leftX &&
-                this.leftX <= paddle.rightX &&
-                this.centerY <= paddle.bottomY &&
-                this.centerY >= paddle.topY;
-        }
-        
-        return false;
-    }
-
-    private paddleCollisionLeft(paddle: Paddle) {
-        
-        if (this._speedX > 0) {
-            return this.rightX >= paddle.leftX &&
-                this.rightX < paddle.rightX &&
-                this.centerY <= paddle.bottomY &&
-                this.centerY >= paddle.topY;
-        }
-        
-        return false;
     }
     
     private drawBoundingBox() {

@@ -59,5 +59,26 @@ export default class Paddle extends Base {
         this.logDebug('Paddle', `spinThreshold: ${spinThreshold}, hitX: ${hitX}, directionX: ${directionX}, we are going: ${result}`);
         return result;
     }
+    collisionLeft(x, y, directionX) {
+        if (directionX > 0) {
+            return this.bottomY >= y && y >= this.topY &&
+                this.leftX <= x && x <= this.rightX;
+        }
+        return false;
+    }
+    collisionRight(x, y, directionX) {
+        if (directionX < 0) {
+            return this.bottomY >= y && y >= this.topY &&
+                this.leftX <= x && x <= this.rightX;
+        }
+        return false;
+    }
+    collisionTop(x, y, directionY) {
+        if (directionY > 0) {
+            return this.bottomY >= y && y >= this.topY &&
+                this.leftX <= x && x <= this.rightX;
+        }
+        return false;
+    }
 }
 //# sourceMappingURL=paddle.js.map
