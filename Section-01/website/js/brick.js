@@ -33,5 +33,49 @@ export default class Brick extends Base {
             // update stuff...
         }
     }
+    collisionLeft(x, y, directionX) {
+        if (this.alive && directionX > 0) {
+            const collision = this.bottomY >= y && y >= this.topY &&
+                this.leftX <= x && x <= this.rightX;
+            if (collision) {
+                this.alive = false;
+                return true;
+            }
+        }
+        return false;
+    }
+    collisionRight(x, y, directionX) {
+        if (this.alive && directionX < 0) {
+            const collision = this.bottomY >= y && y >= this.topY &&
+                this.leftX <= x && x <= this.rightX;
+            if (collision) {
+                this.alive = false;
+                return true;
+            }
+        }
+        return false;
+    }
+    collisionTop(x, y, directionY) {
+        if (this.alive && directionY > 0) {
+            const collision = this.bottomY >= y && y >= this.topY &&
+                this.leftX <= x && x <= this.rightX;
+            if (collision) {
+                this.alive = false;
+                return true;
+            }
+        }
+        return false;
+    }
+    collisionBottom(x, y, directionY) {
+        if (this.alive && directionY < 0) {
+            const collision = this.bottomY >= y && y >= this.topY &&
+                this.leftX <= x && x <= this.rightX;
+            if (collision) {
+                this.alive = false;
+                return true;
+            }
+        }
+        return false;
+    }
 }
 //# sourceMappingURL=brick.js.map

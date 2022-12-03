@@ -8,10 +8,11 @@ export default class Paddle extends Base {
         this._height = 10;
         this.resetPosition();
     }
-    get leftEdge() { return this._centerX - (this._width * 0.5); }
-    get rightEdge() { return this._centerX + (this._width * 0.5); }
-    get topEdge() { return this._centerY - (this._height * 0.5); }
-    get bottomEdge() { return this._centerY + (this._height * 0.5); }
+    get leftX() { return this._centerX - (this._width * 0.5); }
+    get rightX() { return this._centerX + (this._width * 0.5); }
+    get topY() { return this._centerY - (this._height * 0.5); }
+    get bottomY() { return this._centerY + (this._height * 0.5); }
+    get height() { return this._height; }
     resetPosition() {
         this._centerX = this.canvas.width * 0.5;
         // this._centerY = this.canvas.height - (this._height * 0.5);
@@ -19,10 +20,10 @@ export default class Paddle extends Base {
     }
     update(mouseX) {
         this._centerX = mouseX;
-        if (this.leftEdge < 0) {
+        if (this.leftX < 0) {
             this._centerX = this._width * 0.5;
         }
-        else if (this.rightEdge > this.canvas.width) {
+        else if (this.rightX > this.canvas.width) {
             this._centerX = this.canvas.width - (this._width * 0.5);
         }
     }
@@ -33,13 +34,13 @@ export default class Paddle extends Base {
     }
     getPaddleSpin(x) {
         const pCenter = this._width * 0.5;
-        const hitX = Math.abs(x - (this.leftEdge + pCenter));
+        const hitX = Math.abs(x - (this.leftX + pCenter));
         return hitX / (pCenter / 3.5);
     }
     getPaddleDirection(x, speedX) {
         const directionX = speedX < 0 ? -1 : 1;
         const pCenter = this._width * 0.5;
-        const hitX = x - (this.leftEdge + pCenter);
+        const hitX = x - (this.leftX + pCenter);
         const directionHit = hitX < 0 ? -1 : 1;
         const spinThreshold = this.getPaddleSpin(x) * directionHit;
         let result = directionX;

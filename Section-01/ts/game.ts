@@ -89,12 +89,35 @@ export default class Game extends Base {
         this._bricks.draw();
         
         this.drawDebug(() => {
-            this.drawMousePosition();
+            this.drawStats();
         });
     }
-    
-    private drawMousePosition() {
-        this.colorText(this._mouseX, this._mouseY, 'yellow', `${this._mouseX.toFixed(0)},${this._mouseY.toFixed(0)}`);
+
+    private drawStats() {
+        let startX = this._mouseX + 50;
+        let startY = this._mouseY;
+
+        const mousePosition = `Mouse (x,y): ${this._mouseX.toFixed(0)},${this._mouseY.toFixed(0)}`;
+        const ballCenterPosition = `Ball Center (x,y): ${this._ball.centerX},${this._ball.centerY}`;
+        const ballRightPosition = `Ball Right (x,y): ${this._ball.rightX},${this._ball.centerY}`;
+        const ballLeftPosition = `Ball Left (x,y): ${this._ball.leftX},${this._ball.centerY}`;
+        const ballBottomPosition = `Ball Bottom (x,y): ${this._ball.centerX},${this._ball.bottomY}`;
+        const paddleYPositions = `Paddle Top Y: ${this._paddle.topY}, Paddle Bottom Y: ${this._paddle.bottomY}`;
+        const paddleXPositions = `Paddle Left X: ${this._paddle.leftX}, Paddle Right X: ${this._paddle.rightX}`;
+
+        this.colorText(startX, startY, 'yellow', mousePosition);
+        startY += 22;
+        this.colorText(startX, startY, 'yellow', ballCenterPosition);
+        startY += 22;
+        this.colorText(startX, startY, 'yellow', ballBottomPosition);
+        startY += 22;
+        this.colorText(startX, startY, 'yellow', ballLeftPosition);
+        startY += 22;
+        this.colorText(startX, startY, 'yellow', ballRightPosition);
+        startY += 22;
+        this.colorText(startX, startY, 'yellow', paddleYPositions);
+        startY += 22;
+        this.colorText(startX, startY, 'yellow', paddleXPositions);
     }
 
     public run(timestamp: number = 0) {

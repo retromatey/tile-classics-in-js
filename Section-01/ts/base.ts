@@ -46,6 +46,7 @@
     }
     
     protected colorText(x: number, y: number, fillColor: string, text: string) {
+        this.context.font = '20px sans-serif';
         this.context.fillStyle = fillColor;
         this.context.fillText(text, x, y);
     }
@@ -57,13 +58,12 @@
     }
 
     protected updateDebugStepForward(step: () => void, alwaysRun: () => void) {
-
+        alwaysRun();
+        
         if (Base.debugEnabled && Base.pause && Base.stepForward) {
             step();
             Base.stepForward = false;
         }
-        
-        alwaysRun();
     }
 
     protected updateDebugStepBackward(callback: () => void) {

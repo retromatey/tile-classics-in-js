@@ -45,4 +45,68 @@ export default class Brick extends Base {
             // update stuff...
         }
     }
+    
+    public collisionLeft(x: number, y: number, directionX: number) {
+        
+        if (this.alive && directionX > 0) {
+            const collision =
+                this.bottomY >= y && y >= this.topY &&
+                this.leftX <= x && x <= this.rightX;
+
+            if (collision) {
+                this.alive = false;
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    public collisionRight(x: number, y: number, directionX: number) {
+
+        if (this.alive && directionX < 0) {
+            const collision =
+                this.bottomY >= y && y >= this.topY &&
+                this.leftX <= x && x <= this.rightX;
+
+            if (collision) {
+                this.alive = false;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public collisionTop(x: number, y: number, directionY: number) {
+
+        if (this.alive && directionY > 0) {
+            const collision =
+                this.bottomY >= y && y >= this.topY &&
+                this.leftX <= x && x <= this.rightX;
+
+            if (collision) {
+                this.alive = false;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public collisionBottom(x: number, y: number, directionY: number) {
+
+        if (this.alive && directionY < 0) {
+            const collision =
+                this.bottomY >= y && y >= this.topY &&
+                this.leftX <= x && x <= this.rightX;
+
+            if (collision) {
+                this.alive = false;
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

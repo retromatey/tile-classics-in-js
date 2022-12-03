@@ -29,6 +29,7 @@ export default class Base {
         this.context.fill();
     }
     colorText(x, y, fillColor, text) {
+        this.context.font = '20px sans-serif';
         this.context.fillStyle = fillColor;
         this.context.fillText(text, x, y);
     }
@@ -38,11 +39,11 @@ export default class Base {
         }
     }
     updateDebugStepForward(step, alwaysRun) {
+        alwaysRun();
         if (Base.debugEnabled && Base.pause && Base.stepForward) {
             step();
             Base.stepForward = false;
         }
-        alwaysRun();
     }
     updateDebugStepBackward(callback) {
         if (Base.debugEnabled && Base.pause && Base.stepBackward) {
